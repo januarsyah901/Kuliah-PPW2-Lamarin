@@ -22,16 +22,16 @@ class ApplicationsExport implements FromCollection, WithHeadings, WithMapping
      *
      * @return \Illuminate\Support\Collection
      */
-public function collection()
-{
-    $query = Application::with(['user', 'jobVacancy.job']);
+    public function collection()
+    {
+        $query = Application::with(['user', 'jobVacancy.job']);
 
-    if ($this->jobId) {
-        $query->where('job_id', $this->jobId);
+        if ($this->jobId) {
+            $query->where('job_id', $this->jobId);
+        }
+
+        return $query->get();
     }
-
-    return $query->get();
-}
 
     /**
      * Map a single application model to an array for export
@@ -51,14 +51,14 @@ public function collection()
     }
 
     /**
-     * Headings for the exported file
+     * Return headings for the export
      *
      * @return array
      */
     public function headings(): array
     {
         return [
-            'Applicant',
+            'Applicant Name',
             'Job Title',
             'Position',
             'Status',

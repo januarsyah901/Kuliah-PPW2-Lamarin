@@ -5,10 +5,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\EmailTestController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Test Email Routes
+Route::get('/test-email', [EmailTestController::class, 'index'])->name('test-email');
+Route::post('/test-email/send', [EmailTestController::class, 'send'])->name('test-email.send');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);

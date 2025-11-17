@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Job;
+use App\Models\User;
+use App\Models\Application;
+use App\Notifications\NewApplicantNotification;
 use Illuminate\Http\Request;
 use App\Exports\ApplicationsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\JobAppliedMail;
 
 class ApplicationController extends Controller
 {
@@ -18,25 +24,34 @@ class ApplicationController extends Controller
 
         $cvPath = $request->file('cv')->store('cvs', 'public');
 
-        \App\Models\Application::create([
+        $application = Application::create([
             'user_id' => auth()->id(),
             'job_id' => $job_id,
             'cv' => $cvPath,
         ]);
+
+        // Send email notification to applicant
+        Mail::to(auth()->user()->email)->send(new JobAppliedMail($application->jobVacancy->job, $application->user));
+
+        // Send notification to all admins
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new NewApplicantNotification($application));
+        }
 
         return redirect()->back()->with('success', 'Application submitted successfully.');
     }
 
     public function approve($id)
     {
-        $application = \App\Models\Application::findOrFail($id);
+        $application = Application::findOrFail($id);
         $application->update(['status' => 'approved']);
         return redirect()->back()->with('success', 'Application approved successfully.');
     }
 
     public function reject($id)
     {
-        $application = \App\Models\Application::findOrFail($id);
+        $application = Application::findOrFail($id);
         $application->update(['status' => 'rejected']);
         return redirect()->back()->with('success', 'Application rejected successfully.');
     }
@@ -54,7 +69,7 @@ class ApplicationController extends Controller
      */
     public function downloadCv($id)
     {
-        $application = \App\Models\Application::with('user')->findOrFail($id);
+        $application = Application::with('user')->findOrFail($id);
 
         $user = auth()->user();
 

@@ -1,21 +1,6 @@
 @if(Auth::user()->isAdmin())
     <h5>Admin Dashboard</h5>
     <p>Welcome, Admin! You have access to administrative features.</p>
-
-    {{-- Global flash messages --}}
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
     <ul class="nav nav-tabs" id="adminTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="applications-tab" data-bs-toggle="tab" data-bs-target="#applications"
