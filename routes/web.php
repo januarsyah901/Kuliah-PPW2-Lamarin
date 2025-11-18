@@ -42,8 +42,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/export/applications', [ApplicationController::class, 'export'])->name('export.applications')->middleware('admin');
 
     // Secure CV download route
-    Route::get('/applications/{id}/cv', [ApplicationController::class, 'downloadCv'])
-        ->name('applications.download')
-        ->middleware('auth');
+    Route::get('/applications/{id}/cv', [ApplicationController::class, 'downloadCv'])->name('applications.download')->middleware('auth');
 
 });

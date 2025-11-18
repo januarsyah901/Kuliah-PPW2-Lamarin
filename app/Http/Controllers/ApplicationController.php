@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendApplicationMailJob;
 use App\Models\Job;
 use App\Models\User;
 use App\Models\Application;
@@ -31,7 +32,8 @@ class ApplicationController extends Controller
         ]);
 
         // Send email notification to applicant
-        Mail::to(auth()->user()->email)->send(new JobAppliedMail($application->jobVacancy->job, $application->user));
+//        Mail::to(auth()->user()->email)->send(new JobAppliedMail($application->jobVacancy->job, $application->user));
+        dispatch(new SendApplicationMailJob($application->id, $job_id, auth()->id()));
 
         // Send notification to all admins
         $admins = User::where('role', 'admin')->get();

@@ -13,17 +13,16 @@ class JobAppliedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $job, $user;
-
-    use Queueable, SerializesModels;
+    public $job, $user, $application;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($job, $user)
+    public function __construct($job, $user, $application)
     {
         $this->job = $job;
         $this->user = $user;
+        $this->application = $application;
     }
 
     /**
@@ -46,6 +45,7 @@ class JobAppliedMail extends Mailable
             with: [
                 'job' => $this->job,
                 'user' => $this->user,
+                'application' => $this->application,
             ]
         );
     }

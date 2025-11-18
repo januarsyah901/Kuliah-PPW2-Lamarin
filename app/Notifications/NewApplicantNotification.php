@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewApplicantNotification extends Notification
+class NewApplicantNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -39,7 +39,7 @@ class NewApplicantNotification extends Notification
             ->subject('New Application')
             ->line('New applicant has applied for the job: ' . $this->application->jobVacancy->job->title)
             ->line('Applicant Name: ' . $this->application->user->name)
-            ->action('Show Application Detail', url('/applications/' . $this->application->id));
+            ->action('Show Application Detail', url('/applications/' . $this->application->id . '/cv'));
     }
 
     /**

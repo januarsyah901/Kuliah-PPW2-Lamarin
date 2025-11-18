@@ -1,36 +1,28 @@
+{{-- resources/views/emails/job-applied.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Job Application</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background-color: #f4f4f4; padding: 10px; text-align: center; }
-        .content { padding: 20px; }
-        .footer { font-size: 12px; color: #777; text-align: center; margin-top: 20px; }
-    </style>
+    <title>Job Application Confirmation</title>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>New Job Application</h1>
-        </div>
-        <div class="content">
-            <p>Dear Hiring Manager,</p>
-            <p>We have received a new application for the job position: <strong>{{ $job->title }}</strong>.</p>
-            <p><strong>Applicant Details:</strong></p>
-            <ul>
-                <li>Name: {{ $user->name }}</li>
-                <li>Email: {{ $user->email }}</li>
-            </ul>
-            <p>Please review the application in your dashboard.</p>
-            <p>Best regards,<br>Your Job Portal Team</p>
-        </div>
-        <div class="footer">
-            <p>This is an automated email. Please do not reply.</p>
-        </div>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px;">
+        <h1 style="color: #007bff; text-align: center;">Application Submitted Successfully!</h1>
+        <p>Dear {{ $user->name }},</p>
+        <p>Thank you for applying to the position of <strong>{{ $job->title }}</strong>.</p>
+        <p><strong>Application Details:</strong></p>
+        <ul>
+            <li>Job Title: {{ $job->title }}</li>
+            <li>Application ID: #{{ $application->id }}</li>
+            <li>Submitted on: {{ $application->created_at->format('F j, Y') }}</li>
+        </ul>
+        <p>Your application has been received and is under review. We will get back to you soon.</p>
+        <p>Your CV is attached to this email. You can also download it here: <a href="{{ url('/applications/' . $application->id . '/download-cv') }}" style="color: #007bff;">Download CV</a></p>
+        <p>If you have any questions, contact us.</p>
+        <p>Best regards,<br>The Recruitment Team<br>Lamarin</p>
+        <hr style="border: none; border-top: 1px solid #eee;">
+        <p style="font-size: 12px; color: #666; text-align: center;">&copy; 2025 Lamarin Company. This is an automated email.</p>
     </div>
 </body>
 </html>
