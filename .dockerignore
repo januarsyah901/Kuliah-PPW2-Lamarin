@@ -19,8 +19,8 @@ tests/
 .github
 vendor/bin
 README.md
-POSTMAN_COLLECTION_GUIDE.md
-SMTP_TEST_README.md
+Documentation/POSTMAN_COLLECTION_GUIDE.md
+Documentation/SMTP_TEST_README.md
 playwright-api-test.js
 test-api.sh
 screenshots/
