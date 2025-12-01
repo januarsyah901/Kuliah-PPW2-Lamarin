@@ -1,0 +1,53 @@
+services:
+  # PHP Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lamarin_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    depends_on:
+      - db
+    networks:
+      - lamarin_network
+
+  # MySQL Database Service
+  db:
+    image: mysql:8.0
+    container_name: lamarin_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: lamarin
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - lamarin_db_data:/var/lib/mysql
+    ports:
+      - "3306:3306" # Exposing for local development/debugging if needed
+    networks:
+      - lamarin_network
+
+  # Nginx Web Server Service
+  nginx:
+    image: nginx:alpine
+    container_name: lamarin_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - lamarin_network
+
+networks:
+  lamarin_network:
+    driver: bridge
+
+volumes:
+  lamarin_db_data:
+    driver: local
